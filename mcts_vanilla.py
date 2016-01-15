@@ -17,9 +17,14 @@ def traverse_nodes(node, state, identity):
     Returns:        A node from which the next stage of the search can proceed.
 
     """
+
+    # Checking for whether there are still actions to be taken and child nodes left
+    while node.untried_actions == [] and node.child_nodes != []:
+        # Use UCB1 formula to select child node
+        result = sorted(node.child_nodes, key = lambda ucb1: (node.wins - ucb1.wins) + sqrt(2*log(node.visits/ucb1.visits)))
+    return result
     pass
     # Hint: return leaf_node
-
 
 def expand_leaf(node, state):
     """ Adds a new leaf to the tree by creating a new child node for the given node.
