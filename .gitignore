@@ -48,7 +48,12 @@ com_crashlytics_export_strings.xml
 crashlytics.properties
 crashlytics-build.properties
 fabric.properties
+<<<<<<< HEAD
 *.pyc
 .idea/workspace.xml
 .idea/misc.xml
 *.iml
+=======
+
+.idea/workspace.xml
+>>>>>>> 7efd98b9da0a45c7e09519111fe187a17898d540
