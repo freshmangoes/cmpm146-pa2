@@ -1,4 +1,4 @@
-
+I
 # Covers JetBrains IDEs: IntelliJ, RubyMine, PhpStorm, AppCode, PyCharm, CLion, Android Studio and Webstorm
 
 *.iml
@@ -56,4 +56,11 @@ fabric.properties
 =======
 
 .idea/workspace.xml
+<<<<<<< Updated upstream
 >>>>>>> 7efd98b9da0a45c7e09519111fe187a17898d540
+=======
+
+*.xml
+>>>>>>> Stashed changes
+
+*.pyc

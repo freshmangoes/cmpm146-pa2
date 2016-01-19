@@ -17,38 +17,21 @@ def traverse_nodes(node, state, identity):
     Returns:        A node from which the next stage of the search can proceed.
 
     """
-
+    # Return a leaf node
     # print("Node: " + str(node))
     # print("Child nodes: " + str(node.child_nodes))
-    expand_leaf(node, state)
 
-    result = MCTSNode(parent = node, parent_action = None, action_list = node.untried_actions)
-    node.visits+=1
     nn = node.child_nodes.values()
 
-    # cn = node.child_nodes
-    # while node.untried_actions == [] and node.child_nodes != []:
-    #     if state.player_turn == identity:
-    #         # Maximize bot's chances of winning
-    #         result = max(node.child_nodes, key=lambda c:(cn[c].wins/cn[c].visits)+explore_faction
-    #                                                     *sqrt(2*log(cn[c].parent.visits)/cn[c].visits))
-    #     else:
-    #         # Maximize bot's chance of losing if it's the other bot's turn
-    #         result = max(node.child_nodes, key=lambda c:(1-(c.wins/c.visits)+explore_faction
-    #                                                      *sqrt(2*log(cn[c].parent.visits)/cn[c].visits)))
-
-    while node.untried_actions == [] and node.child_nodes != []:
+    while node.untried_actions == [] and len(nn) != 0:
         if state.player_turn == identity:
-            result = max(nn, key=lambda c:((c.wins/c.visits)+explore_faction*
-                         sqrt(2*log(c.parent.visits)/c.visits)))
+            node = max(nn, key=lambda c:((c.wins/c.visits)+explore_faction*sqrt(2*log(c.parent.visits)/c.visits)))
         else:
-            result = max(nn, key=lambda c:((1-(c.wins/c.visits))+explore_faction*
-                         sqrt(2*log(c.parent.visits)/c.visits)))
-
-    return result
+            node = max(nn, key=lambda c:((1-(c.wins/c.visits))+explore_faction*sqrt(2*log(c.parent.visits)/c.visits)))
+        state.apply_move(node.parent_action)
+        nn = node.child_nodes.values()
+    return node
     pass
-    # Hint: return leaf_node
-
 
 def expand_leaf(node, state):
     """ Adds a new leaf to the tree by creating a new child node for the given node.
@@ -63,13 +46,18 @@ def expand_leaf(node, state):
 
     # Make sure there are still actions to be taken
     if node.untried_actions != []:
+
         move = choice(node.untried_actions)
+
         state.apply_move(move)
+
         node.untried_actions.remove(move)
-        new_node = MCTSNode(parent = node, parent_action = move, action_list = node.untried_actions)
-        node.child_nodes.update({move: new_node})
-        # print("New child_nodes: " + str(node.child_nodes))
+        new_node = MCTSNode(node, move, node.untried_actions)
+
+        node.child_nodes[move] = new_node
         return new_node
+    else:
+        return node
     pass
     # Hint: return new_node
 
@@ -81,7 +69,7 @@ def rollout(state):
         state:  The state of the game.
 
     """
-    while state.legal_moves() != []:
+    while not state.is_terminal():
         state.apply_move(choice(state.legal_moves))
     pass
 
@@ -94,8 +82,12 @@ def backpropagate(node, won):
         won:    An indicator of whether the bot won or lost the game.
 
     """
-    if won:
-        node.parent.wins+=1
+
+    while node != None:
+        node.wins += won
+        node.visits += 1
+        node = node.parent
+
     pass
 
 def think(state):
@@ -116,17 +108,22 @@ def think(state):
         root_node.visits = 1
         # Start at root
         node = root_node
-
         # Do MCTS - This is all you!
         # Selection
         v1 = traverse_nodes(node, sampled_game, identity_of_bot)
-        # # Expansion
-        delta = expand_leaf(node, sampled_game)
-        # # Simulation
-        # rollout(sampled_game)
-        # # Backpropogation
-        # backpropagate(v1, delta)
+        # Expansion
+        delta = expand_leaf(v1, sampled_game)
+        # Simulation
+        rollout(sampled_game)
+
+        # Incrementor for wins
+        result = 0
+        if identity_of_bot == sampled_game.winner:
+            result = 1
+
+        # Backpropogation
+        backpropagate(delta, result)
 
     # Return an action, typically the most frequently used action (from the root) or the action with the best
     # estimated win rate.
-    return
+    return max(root_node.child_nodes.values(), key=lambda c: c.wins/c.visits).parent_action
