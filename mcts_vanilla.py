@@ -18,13 +18,14 @@ def traverse_nodes(node, state, identity):
 
     """
 
-
     # print("Node: " + str(node))
     # print("Child nodes: " + str(node.child_nodes))
     expand_leaf(node, state)
 
     result = MCTSNode(parent = node, parent_action = None, action_list = node.untried_actions)
     node.visits+=1
+    nn = node.child_nodes.values()
+
     # cn = node.child_nodes
     # while node.untried_actions == [] and node.child_nodes != []:
     #     if state.player_turn == identity:
@@ -38,11 +39,11 @@ def traverse_nodes(node, state, identity):
 
     while node.untried_actions == [] and node.child_nodes != []:
         if state.player_turn == identity:
-            result = max(node.child_nodes, key=lambda c:(c.wins/c.visits)+explore_faction
-                         *sqrt(2*log(c.parent.visits)/c.visits))
+            result = max(nn, key=lambda c:((c.wins/c.visits)+explore_faction*
+                         sqrt(2*log(c.parent.visits)/c.visits)))
         else:
-            result = max(node.child_nodes, key=lambda c:(1-(c.wins/c.visits))+explore_faction
-                         *sqrt(2*log(c.parent.visits)/c.visits))
+            result = max(nn, key=lambda c:((1-(c.wins/c.visits))+explore_faction*
+                         sqrt(2*log(c.parent.visits)/c.visits)))
 
     return result
     pass
