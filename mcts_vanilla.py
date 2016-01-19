@@ -18,19 +18,32 @@ def traverse_nodes(node, state, identity):
 
     """
 
-    print("Node: " + str(node))
-    print("Child nodes: " + str(node.child_nodes))
+
+    # print("Node: " + str(node))
+    # print("Child nodes: " + str(node.child_nodes))
     expand_leaf(node, state)
 
+    result = MCTSNode(parent = node, parent_action = None, action_list = node.untried_actions)
     node.visits+=1
-    cn = node.child_nodes
+    # cn = node.child_nodes
+    # while node.untried_actions == [] and node.child_nodes != []:
+    #     if state.player_turn == identity:
+    #         # Maximize bot's chances of winning
+    #         result = max(node.child_nodes, key=lambda c:(cn[c].wins/cn[c].visits)+explore_faction
+    #                                                     *sqrt(2*log(cn[c].parent.visits)/cn[c].visits))
+    #     else:
+    #         # Maximize bot's chance of losing if it's the other bot's turn
+    #         result = max(node.child_nodes, key=lambda c:(1-(c.wins/c.visits)+explore_faction
+    #                                                      *sqrt(2*log(cn[c].parent.visits)/cn[c].visits)))
+
     while node.untried_actions == [] and node.child_nodes != []:
         if state.player_turn == identity:
-            # Maximize bot's chances of winning
-            result = max(node.child_nodes, key=lambda c:(cn[c].wins/cn[c].visits)+explore_faction*sqrt(2*log(cn[c].parent.visits)/cn[c].visits))
+            result = max(node.child_nodes, key=lambda c:(c.wins/c.visits)+explore_faction
+                         *sqrt(2*log(c.parent.visits)/c.visits))
         else:
-            # Maximize bot's chance of losing
-            result = max(node.child_nodes, key=lambda c:(1-(c.wins/c.visits)+explore_faction*sqrt(2*log(cn[c].parent.visits)/cn[c].visits)))
+            result = max(node.child_nodes, key=lambda c:(1-(c.wins/c.visits))+explore_faction
+                         *sqrt(2*log(c.parent.visits)/c.visits))
+
     return result
     pass
     # Hint: return leaf_node
@@ -46,13 +59,16 @@ def expand_leaf(node, state):
     Returns:    The added child node.
 
     """
-    statecopy = state.copy()
-    new_node = MCTSNode(node, node.untried_actions[0], statecopy.legal_moves)
-    new_node.visits = 1
-    node.child_nodes[node.untried_actions[0]] = new_node
-    node.untried_actions.remove(node.untried_actions[0])
 
-    return new_node
+    # Make sure there are still actions to be taken
+    if node.untried_actions != []:
+        move = choice(node.untried_actions)
+        state.apply_move(move)
+        node.untried_actions.remove(move)
+        new_node = MCTSNode(parent = node, parent_action = move, action_list = node.untried_actions)
+        node.child_nodes.update({move: new_node})
+        # print("New child_nodes: " + str(node.child_nodes))
+        return new_node
     pass
     # Hint: return new_node
 
@@ -64,7 +80,8 @@ def rollout(state):
         state:  The state of the game.
 
     """
-
+    while state.legal_moves() != []:
+        state.apply_move(choice(state.legal_moves))
     pass
 
 
