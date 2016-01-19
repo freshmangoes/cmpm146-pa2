@@ -3,7 +3,7 @@ from random import choice
 from math import sqrt, log
 
 num_nodes = 1000
-explore_faction = 2
+explore_faction = 0.1
 
 
 def traverse_nodes(node, state, identity):
@@ -26,7 +26,7 @@ def traverse_nodes(node, state, identity):
             node = max(nn, key=lambda c: ((c.wins/c.visits) + explore_faction *
                                           sqrt(2 * log(c.parent.visits) / c.visits)))
         else:
-            node = max(nn, key=lambda c: ((1 - (c.wins / c.visits)) + explore_faction *
+            node = max(nn, key=lambda c: ((1 - c.wins / c.visits) + explore_faction *
                                           sqrt(2 * log(c.parent.visits) / c.visits)))
         state.apply_move(node.parent_action)
         nn = node.child_nodes.values()
@@ -107,7 +107,6 @@ def think(state):
     for step in range(num_nodes):
         # Copy the game for sampling a playthrough
         sampled_game = state.copy()
-        root_node.visits = 1
         # Start at root
         node = root_node
         # Do MCTS - This is all you!
@@ -131,4 +130,5 @@ def think(state):
 
     # Return an action, typically the most frequently used action (from the root) or the action with the best
     # estimated win rate.
+    # print(root_node.tree_to_string(horizon=3))
     return max(root_node.child_nodes.values(), key=lambda c: c.wins/c.visits).parent_action

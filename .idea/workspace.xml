@@ -3,8 +3,8 @@
   <component name="ChangeListManager">
     <list default="true" id="6dc834a0-bfa1-4e23-a302-79fe08eda615" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/mcts_node.py" afterPath="$PROJECT_DIR$/mcts_node.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/mcts_vanilla.py" afterPath="$PROJECT_DIR$/mcts_vanilla.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/p2_sim.py" afterPath="$PROJECT_DIR$/p2_sim.py" />
     </list>
     <ignored path="cmpm146-pa2.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -19,7 +19,7 @@
   <component name="ChangesViewManager" flattened_view="true" show_ignored="false" />
   <component name="CoverageDataManager">
     <SUITE FILE_PATH="coverage/cmpm146-pa2$p2_gui.coverage" NAME="p2_gui Coverage Results" MODIFIED="1453231014565" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/cmpm146-pa2$p2_sim.coverage" NAME="p2_sim Coverage Results" MODIFIED="1453232084964" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/cmpm146-pa2$p2_sim.coverage" NAME="p2_sim Coverage Results" MODIFIED="1453232837650" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
   <component name="CreatePatchCommitExecutor">
     <option name="PATCH_PATH" value="" />
@@ -33,8 +33,8 @@
       <file leaf-file-name="mcts_vanilla.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/mcts_vanilla.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.12307692">
-              <caret line="3" column="0" selection-start-line="3" selection-start-column="0" selection-end-line="3" selection-end-column="0" />
+            <state vertical-scroll-proportion="-3.264192">
+              <caret line="5" column="21" selection-start-line="5" selection-start-column="21" selection-end-line="5" selection-end-column="21" />
               <folding>
                 <element signature="e#0#30#0" expanded="true" />
               </folding>
@@ -55,8 +55,8 @@
       <file leaf-file-name="mcts_node.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/mcts_node.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.33333334">
-              <caret line="42" column="48" selection-start-line="42" selection-start-column="42" selection-end-line="42" selection-end-column="48" />
+            <state vertical-scroll-proportion="-5.0">
+              <caret line="28" column="50" selection-start-line="28" selection-start-column="50" selection-end-line="28" selection-end-column="50" />
               <folding />
             </state>
           </provider>
@@ -118,6 +118,7 @@
         <option value="$PROJECT_DIR$/mcts_modified.py" />
         <option value="$PROJECT_DIR$/rollout_bot.py" />
         <option value="$PROJECT_DIR$/p2_sim.py" />
+        <option value="$PROJECT_DIR$/mcts_node.py" />
         <option value="$PROJECT_DIR$/mcts_vanilla.py" />
       </list>
     </option>
@@ -129,7 +130,7 @@
   </component>
   <component name="ProjectFrameBounds">
     <option name="y" value="23" />
-    <option name="width" value="957" />
+    <option name="width" value="1280" />
     <option name="height" value="773" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="false">
@@ -445,11 +446,17 @@
       <option name="project" value="LOCAL" />
       <updated>1453230886902</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Shit is still broken.">
+      <created>1453232297201</created>
+      <option name="number" value="00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1453232297201</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="23" width="957" height="773" extended-state="0" />
+    <frame x="0" y="23" width="1280" height="773" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32960597" sideWeight="0.5" order="1" side_tool="false" content_ui="combo" />
@@ -459,7 +466,7 @@
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32882884" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.38619676" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2863436" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24920467" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.329429" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="true" content_ui="tabs" />
@@ -506,7 +513,8 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="THINGS ARE STILL BROKEN. ROLLOUT BOT BEATING MCTS_VANILLA WHHHYYY." />
-    <option name="LAST_COMMIT_MESSAGE" value="THINGS ARE STILL BROKEN. ROLLOUT BOT BEATING MCTS_VANILLA WHHHYYY." />
+    <MESSAGE value="Shit is still broken." />
+    <option name="LAST_COMMIT_MESSAGE" value="Shit is still broken." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -926,8 +934,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/mcts_node.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.33333334">
-          <caret line="42" column="48" selection-start-line="42" selection-start-column="42" selection-end-line="42" selection-end-column="48" />
+        <state vertical-scroll-proportion="-5.0">
+          <caret line="28" column="50" selection-start-line="28" selection-start-column="50" selection-end-line="28" selection-end-column="50" />
           <folding />
         </state>
       </provider>
@@ -944,8 +952,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/mcts_vanilla.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.12307692">
-          <caret line="3" column="0" selection-start-line="3" selection-start-column="0" selection-end-line="3" selection-end-column="0" />
+        <state vertical-scroll-proportion="-3.264192">
+          <caret line="5" column="21" selection-start-line="5" selection-start-column="21" selection-end-line="5" selection-end-column="21" />
           <folding>
             <element signature="e#0#30#0" expanded="true" />
           </folding>

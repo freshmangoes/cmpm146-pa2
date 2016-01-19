@@ -26,6 +26,7 @@ class MCTSNode:
         """
         return ' '.join(["[", str(self.parent_action),
                          "Win rate:", "{0:.0f}%".format(100 * self.wins / self.visits),
+                         "Wins:" + str(self.wins),
                          "Visits:", str(self.visits),  "]"])
 
     def tree_to_string(self, horizon=1, indent=0):
