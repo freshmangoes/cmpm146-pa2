@@ -1,8 +1,8 @@
 from p2_game import create_game, State
 from timeit import default_timer as time
 
-import random_bot as red_bot
-# import rollout_bot as red_bot
+# import random_bot as red_bot
+import rollout_bot as red_bot
 # import rollout_bot as blue_bot
 import mcts_vanilla as blue_bot
 
@@ -34,6 +34,9 @@ for i in range(rounds):
     winner = state.winner
     print("The %s bot wins this round! (%s)" % (winner, str(final_score)))
     wins[winner] = wins.get(winner, 0) + 1
+    # Debug statements
+    print("")
+    print("Wins: ", dict(wins))
 
 print("")
 print("Final win counts:", dict(wins))

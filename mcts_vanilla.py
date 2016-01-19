@@ -3,7 +3,7 @@ from random import choice
 from math import sqrt, log
 
 num_nodes = 1000
-explore_faction = 2.
+explore_faction = 2
 
 
 def traverse_nodes(node, state, identity):
@@ -18,20 +18,21 @@ def traverse_nodes(node, state, identity):
 
     """
     # Return a leaf node
-    # print("Node: " + str(node))
-    # print("Child nodes: " + str(node.child_nodes))
 
     nn = node.child_nodes.values()
 
     while node.untried_actions == [] and len(nn) != 0:
         if state.player_turn == identity:
-            node = max(nn, key=lambda c:((c.wins/c.visits)+explore_faction*sqrt(2*log(c.parent.visits)/c.visits)))
+            node = max(nn, key=lambda c: ((c.wins/c.visits) + explore_faction *
+                                          sqrt(2 * log(c.parent.visits) / c.visits)))
         else:
-            node = max(nn, key=lambda c:((1-(c.wins/c.visits))+explore_faction*sqrt(2*log(c.parent.visits)/c.visits)))
+            node = max(nn, key=lambda c: ((1 - (c.wins / c.visits)) + explore_faction *
+                                          sqrt(2 * log(c.parent.visits) / c.visits)))
         state.apply_move(node.parent_action)
         nn = node.child_nodes.values()
     return node
     pass
+
 
 def expand_leaf(node, state):
     """ Adds a new leaf to the tree by creating a new child node for the given node.
@@ -45,7 +46,8 @@ def expand_leaf(node, state):
     """
 
     # Make sure there are still actions to be taken
-    if node.untried_actions != []:
+    # if node.untried_actions!=[]:
+    if node.untried_actions:
 
         move = choice(node.untried_actions)
 
@@ -83,12 +85,12 @@ def backpropagate(node, won):
 
     """
 
-    while node != None:
+    while node:
         node.wins += won
         node.visits += 1
         node = node.parent
-
     pass
+
 
 def think(state):
     """ Performs MCTS by sampling games and calling the appropriate functions to construct the game tree.
@@ -109,10 +111,13 @@ def think(state):
         # Start at root
         node = root_node
         # Do MCTS - This is all you!
+
         # Selection
         v1 = traverse_nodes(node, sampled_game, identity_of_bot)
+
         # Expansion
         delta = expand_leaf(v1, sampled_game)
+
         # Simulation
         rollout(sampled_game)
 
