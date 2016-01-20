@@ -1,3 +1,6 @@
+# Kyle Cilia
+# Joseph Rossi
+# CMPM146 P2
 
 from mcts_node import MCTSNode
 from random import choice
@@ -25,12 +28,12 @@ def traverse_nodes(node, state, identity):
     while node.untried_actions == [] and len(child_values) != 0:
         if state.player_turn == identity:
             # Maximize bot's chances of winning
-            node = max(child_values, key=lambda c:(c.wins/c.visits)
-                                    + explore_faction*sqrt(2*log(c.parent.visits)/c.visits))
+            node = max(child_values, key=lambda c: (c.wins / c.visits)
+                                                   + explore_faction * sqrt(2 * log(c.parent.visits) / c.visits))
         else:
             # Maximize bot's chance of losing
-            node = max(child_values, key=lambda c:(1-(c.wins/c.visits)
-                                    + explore_faction*sqrt(2*log(c.parent.visits)/c.visits)))
+            node = max(child_values, key=lambda c: (1 - (c.wins / c.visits)
+                                                    + explore_faction * sqrt(2 * log(c.parent.visits) / c.visits)))
         state.apply_move(node.parent_action)
         child_values = node.child_nodes.values()
     return node
@@ -119,7 +122,7 @@ def think(state):
         node = root_node
         # Do MCTS - This is all you!
         # Select
-        v1 =  traverse_nodes(node, sampled_game, identity_of_bot)
+        v1 = traverse_nodes(node, sampled_game, identity_of_bot)
         # Expand
         delta = expand_leaf(v1, sampled_game)
         # Rollout
@@ -130,9 +133,6 @@ def think(state):
             result = 1
         backpropagate(delta, result)
 
-        # Debug statement to print entire tree
-        #print(root_node.tree_to_string(3))
-
     # Return an action, typically the most frequently used action (from the root) or the action with the best
     # estimated win rate
-    return max(root_node.child_nodes.values(), key = lambda c: c.visits).parent_action
+    return max(root_node.child_nodes.values(), key=lambda c: c.visits).parent_action

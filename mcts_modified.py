@@ -1,10 +1,13 @@
+# Kyle Cilia
+# Joseph Rossi
+# CMPM146 P2
 
 from mcts_node import MCTSNode
 from random import choice
 from math import sqrt, log
 
-num_nodes = 1000
-explore_faction = 2.
+num_nodes = 100
+explore_faction = 0.3
 
 
 def traverse_nodes(node, state, identity):
@@ -25,12 +28,12 @@ def traverse_nodes(node, state, identity):
     while node.untried_actions == [] and len(child_values) != 0:
         if state.player_turn == identity:
             # Maximize bot's chances of winning
-            node = max(child_values, key=lambda c:(c.wins/c.visits)
-                                    + explore_faction*sqrt(2*log(c.parent.visits)/c.visits))
+            node = max(child_values, key=lambda c: (c.wins / c.visits)
+                                                   + explore_faction * sqrt(2 * log(c.parent.visits) / c.visits))
         else:
             # Maximize bot's chance of losing
-            node = max(child_values, key=lambda c:(1-(c.wins/c.visits)
-                                    + explore_faction*sqrt(2*log(c.parent.visits)/c.visits)))
+            node = max(child_values, key=lambda c: (1 - (c.wins / c.visits)
+                                                    + explore_faction * sqrt(2 * log(c.parent.visits) / c.visits)))
         state.apply_move(node.parent_action)
         child_values = node.child_nodes.values()
     return node
@@ -74,10 +77,78 @@ def rollout(state):
         state:  The state of the game.
 
     """
+
+    # List for coordinates that make a box for the other player to close
+    dont_go = []
+
+    # Copy of legal moves
+    moves = state.legal_moves
+
+    # Heuristic to complete horse-shoe shape if possible
+    for i in range(0, 3):
+        for j in range(0, 3):
+            # n shape
+            if (i, j) in state.h_line_owners \
+                    and (i, j) in state.v_line_owners \
+                    and (i + 1, j) in state.v_line_owners:
+                state.apply_move(('h', (i, j + 1)))
+                return
+            # [ shape
+            elif (i, j) in state.h_line_owners \
+                    and (i, j) in state.v_line_owners \
+                    and (i, j + 1) in state.v_line_owners:
+                state.apply_move(('v', (i + 1, j)))
+                return
+            # ] shape
+            elif (i, j) in state.h_line_owners \
+                    and (i + 1, j) in state.v_line_owners \
+                    and (i + 1, j + 1) in state.v_line_owners:
+                state.apply_move(('v', (i, j)))
+                return
+            # U shape
+            elif (i, j + 1) in state.h_line_owners \
+                    and (i + 1, j) in state.v_line_owners \
+                    and (i, j) in state.v_line_owners:
+                state.apply_move(('h', (i, j)))
+                return
+
+            # Heuristic to check to not make a box for the other player to close
+            if (i, j) in state.h_line_owners:
+                if (i, j) in state.v_line_owners:
+                    dont_go.append(('h', (i + 1, j)))
+                    dont_go.append(('v', (i, j + 1)))
+                if (i, j + 1) in state.h_line_owners:
+                    dont_go.append(('v', (i, j)))
+                    dont_go.append(('v', (i + 1, j)))
+            elif (i + 1, j) in state.v_line_owners:
+                if (i, j + 1) in state.h_line_owners:
+                    dont_go.append(('h', (i, j)))
+                    dont_go.append(('v', (i, j)))
+                if (i, j) in state.v_line_owners:
+                    dont_go.append(('h', (i, j)))
+                    dont_go.append(('h', (i, j + 1)))
+            elif (i + 1, j) in state.h_line_owners \
+                    and (i, j) in state.v_line_owners:
+                dont_go.append(('h', (i, j)))
+                dont_go.append(('v', (i + 1, j)))
+            elif (i, j) in state.h_line_owners \
+                    and (i + 1, j) in state.v_line_owners:
+                dont_go.append(('v', (i, j)))
+                dont_go.append(('h', (i, j + 1)))
+
     # Checking to make sure there are still moves left
     while not state.is_terminal():
         # Choose a random move
-        state.apply_move(choice(state.legal_moves))
+        m = choice(state.legal_moves)
+        # Check to see if move is in don't go
+        if m in dont_go:
+            # Choose another move
+            m = choice(state.legal_moves)
+            state.apply_move(m)
+        # If it is among only possible moves left, do it anyways
+        else:
+            state.apply_move(m)
+
     pass
 
 
@@ -119,7 +190,7 @@ def think(state):
         node = root_node
         # Do MCTS - This is all you!
         # Select
-        v1 =  traverse_nodes(node, sampled_game, identity_of_bot)
+        v1 = traverse_nodes(node, sampled_game, identity_of_bot)
         # Expand
         delta = expand_leaf(v1, sampled_game)
         # Rollout
@@ -130,9 +201,6 @@ def think(state):
             result = 1
         backpropagate(delta, result)
 
-        # Debug statement to print entire tree
-        #print(root_node.tree_to_string(3))
-
     # Return an action, typically the most frequently used action (from the root) or the action with the best
     # estimated win rate
-    return max(root_node.child_nodes.values(), key = lambda c: c.visits).parent_action
+    return max(root_node.child_nodes.values(), key=lambda c: c.visits).parent_action
