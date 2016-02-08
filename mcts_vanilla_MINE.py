@@ -1,13 +1,9 @@
-# Kyle Cilia
-# Joseph Rossi
-# CMPM146 P2
-
 from mcts_node import MCTSNode
 from random import choice
 from math import sqrt, log
 
 num_nodes = 1000
-explore_faction = 2.
+explore_faction = 0.1
 
 
 def traverse_nodes(node, state, identity):
@@ -21,25 +17,21 @@ def traverse_nodes(node, state, identity):
     Returns:        A node from which the next stage of the search can proceed.
 
     """
+    # Return a leaf node
 
-    child_values = node.child_nodes.values()
-    # Checking to make sure there are no untried actions
-    # and there are still child nodes left
-    while node.untried_actions == [] and len(child_values) != 0:
+    nn = node.child_nodes.values()
+
+    while node.untried_actions == [] and len(nn) != 0:
         if state.player_turn == identity:
-            # Maximize bot's chances of winning
-            node = max(child_values, key=lambda c: (c.wins / c.visits)
-                                                   + explore_faction * sqrt(2 * log(c.parent.visits) / c.visits))
+            node = max(nn, key=lambda c: ((c.wins/c.visits) + explore_faction *
+                                          sqrt(2 * log(c.parent.visits) / c.visits)))
         else:
-            # Maximize bot's chance of losing
-            node = max(child_values, key=lambda c: (1 - (c.wins / c.visits)
-                                                    + explore_faction * sqrt(2 * log(c.parent.visits) / c.visits)))
+            node = max(nn, key=lambda c: ((1 - c.wins / c.visits) + explore_faction *
+                                          sqrt(2 * log(c.parent.visits) / c.visits)))
         state.apply_move(node.parent_action)
-        child_values = node.child_nodes.values()
+        nn = node.child_nodes.values()
     return node
-
     pass
-    # Hint: return leaf_node
 
 
 def expand_leaf(node, state):
@@ -52,20 +44,22 @@ def expand_leaf(node, state):
     Returns:    The added child node.
 
     """
-    new_node = node
-    # Checking to make sure there are still untried actions
+
+    # Make sure there are still actions to be taken
+    # if node.untried_actions!=[]:
     if node.untried_actions:
-        # Randomly choose untried action
+
         move = choice(node.untried_actions)
-        # Apply the move to the game state
+
         state.apply_move(move)
-        # Make a new node with the move and the game state
-        new_node = MCTSNode(node, move, state.legal_moves)
-        # Append the new node to the tree
-        node.child_nodes[move] = new_node
-        # Remove the action from the list of untried actions
+
         node.untried_actions.remove(move)
-    return new_node
+        new_node = MCTSNode(node, move, node.untried_actions)
+
+        node.child_nodes[move] = new_node
+        return new_node
+    else:
+        return node
     pass
     # Hint: return new_node
 
@@ -77,9 +71,7 @@ def rollout(state):
         state:  The state of the game.
 
     """
-    # Checking to make sure there are still moves left
     while not state.is_terminal():
-        # Choose a random move
         state.apply_move(choice(state.legal_moves))
     pass
 
@@ -94,11 +86,8 @@ def backpropagate(node, won):
     """
 
     while node:
-        # Increment the number of wins if the bot won
         node.wins += won
-        # Increment the number of visits
         node.visits += 1
-        # Trace back on the tree
         node = node.parent
     pass
 
@@ -121,18 +110,25 @@ def think(state):
         # Start at root
         node = root_node
         # Do MCTS - This is all you!
-        # Select
+
+        # Selection
         v1 = traverse_nodes(node, sampled_game, identity_of_bot)
-        # Expand
+
+        # Expansion
         delta = expand_leaf(v1, sampled_game)
-        # Rollout
+
+        # Simulation
         rollout(sampled_game)
-        # Iterator for backpropogate and win
+
+        # Incrementor for wins
         result = 0
         if identity_of_bot == sampled_game.winner:
             result = 1
+
+        # Backpropogation
         backpropagate(delta, result)
 
     # Return an action, typically the most frequently used action (from the root) or the action with the best
-    # estimated win rate
-    return max(root_node.child_nodes.values(), key=lambda c: c.visits).parent_action
+    # estimated win rate.
+    # print(root_node.tree_to_string(horizon=3))
+    return max(root_node.child_nodes.values(), key=lambda c: c.wins/c.visits).parent_action

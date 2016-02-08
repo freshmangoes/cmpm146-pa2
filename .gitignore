@@ -1,4 +1,4 @@
-
+I
 # Covers JetBrains IDEs: IntelliJ, RubyMine, PhpStorm, AppCode, PyCharm, CLion, Android Studio and Webstorm
 
 *.iml
@@ -48,3 +48,19 @@ com_crashlytics_export_strings.xml
 crashlytics.properties
 crashlytics-build.properties
 fabric.properties
+<<<<<<< HEAD
+*.pyc
+.idea/workspace.xml
+.idea/misc.xml
+*.iml
+=======
+
+.idea/workspace.xml
+<<<<<<< Updated upstream
+>>>>>>> 7efd98b9da0a45c7e09519111fe187a17898d540
+=======
+
+*.xml
+>>>>>>> Stashed changes
+
+*.pyc
